@@ -284,6 +284,10 @@ analyzer = FileAnalyzer()
 
 async def handle_telegram_message(update: Update) -> None:
     """Handle incoming Telegram messages"""
+    if not bot:
+        logger.error("Bot not initialized")
+        return
+        
     message = update.message
     chat_id = message.chat_id
     
