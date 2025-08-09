@@ -55,7 +55,7 @@ function App() {
     setError('');
     
     try {
-      const response = await fetch(`${backendUrl}/api/analyze-file?filename=${encodeURIComponent(filename)}`);
+      const response = await fetch(`${backendUrl}/api/analyze-filename?filename=${encodeURIComponent(filename)}`);
       if (response.ok) {
         const data = await response.json();
         setAnalysis(data);
