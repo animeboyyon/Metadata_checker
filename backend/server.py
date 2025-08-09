@@ -595,8 +595,18 @@ async def get_bot_stats():
         return {"error": "Could not retrieve stats"}
 
 @app.post("/api/analyze-file")
-async def analyze_file_api(filename: str):
+async def analyze_file_api(request: dict):
     """Analyze file via API"""
+    filename = request.get("filename", "")
+    if not filename:
+        raise HTTPException(status_code=400, detail="Filename is required")
+    
+    analysis = analyzer.analyze_filename(filename)
+    return analysis.dict()
+
+@app.get("/api/analyze-filename")
+async def analyze_filename_get(filename: str):
+    """Analyze file via GET API"""
     analysis = analyzer.analyze_filename(filename)
     return analysis.dict()
 
