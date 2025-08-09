@@ -36,7 +36,17 @@ app.add_middleware(
 # Initialize Telegram Bot
 BOT_TOKEN = os.getenv("TELEGRAM_TOKEN")
 WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "telegram_bot_webhook_secret_2025")
-bot = Bot(token=BOT_TOKEN)
+
+# Initialize bot only if token is available
+bot = None
+if BOT_TOKEN:
+    try:
+        bot = Bot(token=BOT_TOKEN)
+        logger.info("Telegram bot initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize bot: {e}")
+else:
+    logger.warning("No Telegram bot token provided")
 
 # MongoDB connection
 @app.on_event("startup")
