@@ -167,7 +167,7 @@ Just send me any file and I'll analyze it! 📁✨
             file_unique_id=document.file_unique_id
         )
         
-        await self.analyze_and_respond(update, file_info)
+        await self.analyze_and_respond(update, file_info, context)
 
     async def handle_video(self, update: Update, context) -> None:
         """Handle video files"""
@@ -181,7 +181,7 @@ Just send me any file and I'll analyze it! 📁✨
             file_unique_id=video.file_unique_id
         )
         
-        await self.analyze_and_respond(update, file_info)
+        await self.analyze_and_respond(update, file_info, context)
 
     async def handle_audio(self, update: Update, context) -> None:
         """Handle audio files"""
