@@ -14,6 +14,10 @@ from pydantic import BaseModel
 from typing import Optional, Dict, List, Any
 import httpx
 import uuid
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
