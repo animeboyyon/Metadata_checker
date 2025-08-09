@@ -288,9 +288,6 @@ def main():
         # Create application
         application = Application.builder().token(TOKEN).build()
         
-        # Setup database connection
-        application.job_queue.run_once(setup_database, when=1)
-        
         # Add command handlers
         application.add_handler(CommandHandler(["start", "help"], start_command))
         application.add_handler(CommandHandler("analyze", analyze_command))
