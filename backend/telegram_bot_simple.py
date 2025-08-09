@@ -50,6 +50,10 @@ async def init_mongodb():
 
 async def start_command(update, context):
     """Handle /start and /help commands"""
+    # Initialize database on first command
+    if mongodb_client is None:
+        await init_mongodb()
+    
     welcome_message = """
 🤖 *Welcome to File Metadata Analyzer Bot\\!*
 
