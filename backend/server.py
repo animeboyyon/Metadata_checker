@@ -555,6 +555,9 @@ async def get_user_stats(chat_id: int) -> str:
 @app.post("/api/webhook/{secret}")
 async def telegram_webhook(secret: str, request: Request):
     """Handle Telegram webhook"""
+    if not bot:
+        raise HTTPException(status_code=503, detail="Bot not available")
+        
     if secret != WEBHOOK_SECRET:
         raise HTTPException(status_code=403, detail="Invalid webhook secret")
     
