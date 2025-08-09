@@ -198,9 +198,13 @@ Just send me any file and I'll analyze it! 📁✨
         
         await self.analyze_and_respond(update, file_info)
 
-    async def analyze_and_respond(self, update: Update, file_info: FileMetadata):
+    async def analyze_and_respond(self, update: Update, file_info: FileMetadata, context=None):
         """Analyze file and send response"""
         try:
+            # Send "typing" action if context is available
+            if context:
+                await context.bot.send_chat_action(chat_id=update.effective_chat.id, action='typing')
+            
             # Analyze the file
             analysis = analyzer.analyze_filename(file_info.file_name)
             response = format_analysis_response(analysis, file_info)
@@ -209,16 +213,19 @@ Just send me any file and I'll analyze it! 📁✨
             
             # Log to database
             if self.mongodb:
-                await self.mongodb.analyses.insert_one({
-                    "id": str(uuid.uuid4()),
-                    "chat_id": update.effective_chat.id,
-                    "username": update.effective_user.username,
-                    "filename": file_info.file_name,
-                    "file_metadata": file_info.dict(),
-                    "analysis": analysis.dict(),
-                    "timestamp": datetime.utcnow(),
-                    "source": "file_upload"
-                })
+                try:
+                    await self.mongodb.analyses.insert_one({
+                        "id": str(uuid.uuid4()),
+                        "chat_id": update.effective_chat.id,
+                        "username": update.effective_user.username,
+                        "filename": file_info.file_name,
+                        "file_metadata": file_info.dict(),
+                        "analysis": analysis.dict(),
+                        "timestamp": datetime.utcnow(),
+                        "source": "file_upload"
+                    })
+                except Exception as e:
+                    logger.error(f"DB log error: {e}")
                 
         except Exception as e:
             logger.error(f"Error analyzing file: {e}")
